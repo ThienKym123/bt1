@@ -1,6 +1,6 @@
-import React from 'react';
-import { StyleSheet, Text, View, FlatList } from 'react-native';
-import { Avatar, List } from 'react-native-paper';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, FlatList, TouchableOpacity } from 'react-native';
+import { Avatar } from 'react-native-paper';
 
 const notifications = [
   {
@@ -48,15 +48,23 @@ const notifications = [
 ];
 
 export default function App() {
+  const [selectedNotification, setSelectedNotification] = useState(null);
+
   const renderNotification = ({ item }) => (
-    <View style={styles.notificationContainer}>
+    <TouchableOpacity
+      style={[
+        styles.notificationContainer,
+        item.id === selectedNotification && styles.selectedNotificationContainer,
+      ]}
+      onPress={() => setSelectedNotification(item.id)}
+    >
       <Avatar.Icon size={40} icon={item.icon} style={styles.icon} />
       <View style={styles.textContainer}>
         <Text style={styles.titleText}>{item.title}</Text>
         <Text style={styles.messageText}>{item.message}</Text>
         <Text style={styles.dateText}>{item.date}</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 
   return (
@@ -77,6 +85,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     paddingTop: 50,
+  },
+  border:{
     borderBottomWidth: 1,
   },
   headerText: {
@@ -85,16 +95,15 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginBottom: 20,
   },
-  border: {
-    borderBottomWidth: 1,
-  },
   notificationContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     padding: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#ddd',
-    borderTopColor: '#ddd',
+  },
+  selectedNotificationContainer: {
+    backgroundColor: '#e0f7fa',
   },
   icon: {
     marginRight: 10,
